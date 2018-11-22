@@ -1,0 +1,53 @@
+Configuration:
+
+  status: warn
+
+  Properties: 
+    Property: 
+      - name: log.level.console
+        #value: trace
+        value: debug
+      - name: log.level.tag
+        value: trace       
+      - name: log.path
+        value: /tag-web-ui/logs
+      - name: project.name
+        value: crt-tag-web-ui
+  
+  Appenders:
+    Console: 
+      name: CONSOLE
+      target: SYSTEM_OUT
+      ThresholdFilter:
+        level: ${sys:log.level.console} 
+        onMatch: ACCEPT
+        onMismatch: DENY
+      PatternLayout:
+        pattern: "[%d{yyyy-MM-dd HH:mm:ss,SSS}] (%C:%L) - %m%n"
+    RollingFile: 
+      - name: ROLLING_FILE
+        ignoreExceptions: false
+        fileName: ${log.path}/${project.name}.log
+        filePattern: "${log.path}/$${date:yyyy-MM}/${project.name}-%d{yyyy-MM-dd}-%i.log.gz"
+        PatternLayout:
+          pattern: "%d{yyyy-MM-dd HH:mm:ss,SSS} %4p %t (%F:%L) - %m%n"
+        Policies:
+          SizeBasedTriggeringPolicy:
+            size: "128 MB"
+        DefaultRolloverStrategy:
+          max: 1000
+
+  Loggers:
+    Root:
+      level: info
+      AppenderRef:
+        - ref: CONSOLE
+        - ref: ROLLING_FILE
+    Logger: 
+      - name: com.crt.tag.web.ui
+        additivity: false
+        level: ${sys:log.level.tag}
+        AppenderRef:
+          - ref: CONSOLE
+          - ref: ROLLING_FILE
+          

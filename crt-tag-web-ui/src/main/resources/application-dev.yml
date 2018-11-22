@@ -1,0 +1,18 @@
+# 测试环境配置
+
+server:
+  port: 8089
+
+
+spring: 
+  profiles: dev
+  datasource1: 
+    url: jdbc:mysql://locathost:3306/crt_wanjia?characterEncoding=utf8&useSSL=false
+    driver-class-name: com.mysql.jdbc.Driver
+    username: root
+    password: mysql
+    hikari:
+      maxLifetime: 1765000
+      maximumPoolSize: 20
+      connectionTimeout: 30000
+      idleTimeout: 600000

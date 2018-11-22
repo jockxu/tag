@@ -1,0 +1,18 @@
+# 系统信息
+info: 
+  app:
+    name: "@project.name@"
+    description: "@project.description@"
+    version: "@project.version@"
+    spring-boot-version: "@project.parent.version@"
+
+spring:
+  profiles:
+    active: test
+
+    
+sysProperties: 
+  session-timeout: 3600
+  developerList: 
+    - name: jock_xu
+      value: 15600085918@163.com

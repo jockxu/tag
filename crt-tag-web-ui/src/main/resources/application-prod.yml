@@ -1,0 +1,17 @@
+# 生产环境配置
+
+server:
+  port: 8090
+
+spring: 
+  profiles: prod
+  datasource1: 
+    url: jdbc:mysql://10.0.108.56:3306/crt_wanjia?useUnicode=true&characterEncoding=utf-8&useSSL=false
+    driver-class-name: com.mysql.jdbc.Driver
+    username:
+    password:
+    hikari:
+      maxLifetime: 1765000
+      maximumPoolSize: 20
+      connectionTimeout: 30000
+      idleTimeout: 600000

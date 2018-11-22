@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.crt.tag.web.ui.modules.tag.repository.TagLabelCategoryDao" >
+
+	<sql id="FIND_ALL_COLUMN" >
+        id,parent_id,category_code,parent_ids,category_name,category_level,category_sort,category_icon,category_remark,is_category_show,is_category_leaf,data_state,create_user_id,create_time,update_user_id,update_time,category_type,outter_code,action_type,action_desc_bu_name as actionDescBuName
+    </sql>
+
+	<!-- 模块共有接口实现 -->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.crt.tag.web.ui.modules.tag.repository.domain.TagLabelCategory">
+       	INSERT INTO tag_label_category( parent_id, category_code, parent_ids, category_name, category_level, category_sort, category_icon, category_remark, is_category_show, is_category_leaf, data_state, create_user_id, create_time, update_user_id, update_time, category_type, outter_code, action_type) 
+       	VALUES( #{parentId}, #{categoryCode}, #{parentIds}, #{categoryName}, #{categoryLevel}, #{categorySort}, #{categoryIcon}, #{categoryRemark}, #{isCategoryShow}, #{isCategoryLeaf}, #{dataState}, #{createUserId}, #{createTime}, #{updateUserId}, #{updateTime}, #{categoryType}, #{outterCode}, #{actionType})
+    </insert>
+    
+    <!-- DELETE FROM tag_label_category WHERE id =#{id} -->
+    <delete id="delete" parameterType="java.lang.Long" >
+		UPDATE tag_label_category SET data_state = '0' WHERE id =#{id}
+    </delete>
+    
+    <update id="update" parameterType="com.crt.tag.web.ui.modules.tag.repository.domain.TagLabelCategory">
+		UPDATE tag_label_category SET 
+			<if test="dataState != null">data_state = #{dataState}</if>
+			<if test="parentId != null">,parent_id = #{parentId}</if>
+			<if test="categoryCode != null">,category_code = #{categoryCode}</if>
+			<if test="parentIds != null">,parent_ids = #{parentIds}</if>
+			<if test="categoryName != null">,category_name = #{categoryName}</if>
+			<if test="categoryLevel != null">,category_level = #{categoryLevel}</if>
+			<if test="categorySort != null">,category_sort = #{categorySort}</if>
+			<if test="categoryIcon != null">,category_icon = #{categoryIcon}</if>
+			<if test="categoryRemark != null">,category_remark = #{categoryRemark}</if>
+			<if test="isCategoryShow != null">,is_category_show = #{isCategoryShow}</if>
+			<if test="isCategoryLeaf != null">,is_category_leaf = #{isCategoryLeaf}</if>
+			<if test="createUserId != null">,create_user_id = #{createUserId}</if>
+			<if test="createTime != null">,create_time = #{createTime}</if>
+			<if test="updateUserId != null">,update_user_id = #{updateUserId}</if>
+			<if test="updateTime != null">,update_time = #{updateTime}</if>
+			<if test="categoryType != null">,category_type = #{categoryType}</if>
+			<if test="outterCode != null">,outter_code = #{outterCode}</if>
+			<if test="actionType != null">,action_type = #{actionType}</if>
+		WHERE id = #{id}
+    </update>
+    
+    <select id="get" parameterType="java.lang.Long" resultType="com.crt.tag.web.ui.modules.tag.repository.domain.TagLabelCategory">
+		SELECT <include refid="FIND_ALL_COLUMN" /> FROM tag_label_category WHERE id = #{id}
+    </select>
+    
+    <select id="findList" parameterType="com.crt.tag.web.ui.modules.tag.repository.domain.TagLabelCategory" resultType="com.crt.tag.web.ui.modules.tag.repository.domain.TagLabelCategory">
+		SELECT
+		id,
+		parent_id,
+		category_code,
+		parent_ids,category_name,category_level,category_sort,category_icon,category_remark,is_category_show,is_category_leaf,data_state,create_user_id,create_time,update_user_id,update_time,category_type,outter_code,action_type,action_desc_bu_name as actionDescBuName
+		FROM tag_label_category WHERE 1=1
+			<if test="parentId != null">AND parent_id = #{parentId}</if>
+			<if test="categoryCode != null">AND category_code = #{categoryCode}</if>
+			<if test="parentIds != null">AND parent_ids = #{parentIds}</if>
+			<if test="categoryName != null">AND category_name = #{categoryName}</if>
+			<if test="categoryLevel != null">AND category_level = #{categoryLevel}</if>
+			<if test="categorySort != null">AND category_sort = #{categorySort}</if>
+			<if test="categoryIcon != null">AND category_icon = #{categoryIcon}</if>
+			<if test="categoryRemark != null">AND category_remark = #{categoryRemark}</if>
+			<if test="isCategoryShow != null">AND is_category_show = #{isCategoryShow}</if>
+			<if test="isCategoryLeaf != null">AND is_category_leaf = #{isCategoryLeaf}</if>
+			<if test="dataState != null">AND data_state = #{dataState}</if>
+			<!-- <if test="categoryType != null">AND category_type = #{categoryType}</if> -->
+			<if test="outterCode != null">AND outter_code = #{outterCode}</if>
+			<if test="actionType != null">AND action_type = #{actionType}</if>
+			<if test='categoryType == "2"'>
+				and is_category_leaf &lt;&gt; '1'
+			</if>
+		ORDER BY CATEGORY_CODE,CATEGORY_SORT
+    </select>
+    
+     <select id="findListItemCode"  parameterType="java.lang.Long"  resultType="com.crt.tag.web.ui.modules.tag.repository.domain.TagLabelCategory">
+        SELECT  DISTINCT(i.item_code),c.* from tag_system_data_auth d LEFT JOIN tag_label_category c ON d.LABEL_ID = c.ID  LEFT JOIN tag_label_item_info i ON c.ID= i.label_id
+
+ where user_id= #{userId} and OUTTER_CODE = "" and IS_CATEGORY_LEAF=1 and c.DATA_STATE =1
+    </select>
+    
+
+    <select id="findAllList" resultType="com.crt.tag.web.ui.modules.tag.repository.domain.TagLabelCategory">
+		SELECT <include refid="FIND_ALL_COLUMN" /> FROM tag_label_category WHERE data_state = '1'
+    </select>
+
+</mapper>
