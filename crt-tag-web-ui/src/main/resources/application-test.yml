@@ -10,7 +10,7 @@ spring:
      max-file-size: 10
   profiles: test
   datasource1:
-    url: jdbc:mysql://10.0.53.179:3306/crt_wanjia?characterEncoding=utf8&useSSL=false
+    url: jdbc:mysql://localhost:3306/crt_wanjia?characterEncoding=utf8&useSSL=false
     driver-class-name: com.mysql.jdbc.Driver
     username:
     password:
